@@ -28,8 +28,18 @@ The results should have this structure:
  *  the "name" of the package that has the oldest "date" value
  */
 
+const axios = require('axios');
+
 module.exports = async function oldestPackageName() {
-  // TODO
+  const name = await axios.post('http://ambush-api.inyourarea.co.uk/ambush/intercept', {
+    "url": "https://api.npms.io/v2/search/suggestions?q=react",
+    "method": "GET",
+    "return_payload": true
+  }).then(data => data.data.content)
+    .then(content => content.reduce((accu, entry) => {
+      return new Date(accu.date) <= new Date(entry.package.date) ? accu : entry.package
+    }))
+    .then(oldest => oldest.name)
 
   return name
 };
