@@ -59,7 +59,7 @@ module.exports = async function organiseMaintainers() {
       packageList[mName.username] ? packageList[mName.username].push(packageNames) : packageList[mName.username] = [packageNames]
     });
   })
-  //trun raw data into information
+  //turn raw data into information
   for (const [key, val] of Object.entries(packageList)) {
     maintainers.push({ username: key, packageNames: val.sort() })
   }
