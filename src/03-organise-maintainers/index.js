@@ -47,13 +47,11 @@ module.exports = async function organiseMaintainers() {
     "method": "GET",
     "return_payload": true
   }).then(data => data.data.content)
-  let usernameList = [];
   let packageList = [];
   const maintainers = [];
   name.map(entry => {
     const packageNames = entry.package.name
     entry.package.maintainers.map(mName => {
-      if (!usernameList.includes(mName.username)) usernameList.push(mName.username);
       packageList[mName.username] ? packageList[mName.username].push(packageNames) : packageList[mName.username] = [packageNames]
     });
   })
