@@ -32,12 +32,14 @@ The results should have this structure:
 const axios = require('axios');
 
 module.exports = async function countMajorVersionsAbove10() {
+  //receive data and save
   const count = await axios.post('http://ambush-api.inyourarea.co.uk/ambush/intercept', {
     "url": "https://api.npms.io/v2/search/suggestions?q=react",
     "method": "GET",
     "return_payload": true
   }).then(data => data.data.content)
     .then(content => {
+      //filter packages that the package's version is greater than 10
       return content.filter(entry => entry.package.version.split('.')[0] > 10).length
     })
 

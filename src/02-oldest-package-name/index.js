@@ -31,14 +31,17 @@ The results should have this structure:
 const axios = require('axios');
 
 module.exports = async function oldestPackageName() {
+  //receive data and save
   const name = await axios.post('http://ambush-api.inyourarea.co.uk/ambush/intercept', {
     "url": "https://api.npms.io/v2/search/suggestions?q=react",
     "method": "GET",
     "return_payload": true
   }).then(data => data.data.content)
     .then(content => content.reduce((accu, entry) => {
+      //compare current date and the accumulator
       return new Date(accu.date) <= new Date(entry.package.date) ? accu : entry.package
     }))
+    //return the name of the oldest date
     .then(oldest => oldest.name)
 
   return name

@@ -42,6 +42,7 @@ The results should have this structure:
 const axios = require('axios');
 
 module.exports = async function organiseMaintainers() {
+  //receive data and save
   const name = await axios.post('http://ambush-api.inyourarea.co.uk/ambush/intercept', {
     "url": "https://api.npms.io/v2/search/suggestions?q=react",
     "method": "GET",
@@ -49,15 +50,20 @@ module.exports = async function organiseMaintainers() {
   }).then(data => data.data.content)
   let packageList = [];
   const maintainers = [];
+  //iterate every package names
   name.map(entry => {
     const packageNames = entry.package.name
+    //iterate every maintainers
     entry.package.maintainers.map(mName => {
+      //if username exists, add packageNames to array, else create the username to passed at
       packageList[mName.username] ? packageList[mName.username].push(packageNames) : packageList[mName.username] = [packageNames]
     });
   })
+  //trun raw data into information
   for (const [key, val] of Object.entries(packageList)) {
     maintainers.push({ username: key, packageNames: val.sort() })
   }
+  //sorting for username
   maintainers.sort((a, b) => (a.username > b.username) ? 1 : ((b.username > a.username) ? -1 : 0))
 
   return maintainers
